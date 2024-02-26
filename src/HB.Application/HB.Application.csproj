@@ -7,7 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\HB.Infrastructure\HB.Infrastructure.csproj" />
     <ProjectReference Include="..\HB.Shared\HB.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Features\Hotel\Commands\" />
   </ItemGroup>
 
 </Project>

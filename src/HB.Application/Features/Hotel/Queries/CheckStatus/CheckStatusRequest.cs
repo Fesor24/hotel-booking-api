@@ -3,4 +3,4 @@ using HB.Domain.Shared;
 using MediatR;
 
 namespace HB.Application.Features.Hotel.Queries.CheckStatus;
-public record CheckStatusRequest : IRequest<Result<object, HotelBedErrorResponse>>; 
+public record CheckStatusRequest : IRequest<Result<HotelBedStatusResponse, Error>>; 

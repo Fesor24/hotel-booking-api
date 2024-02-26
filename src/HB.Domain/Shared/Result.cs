@@ -13,7 +13,7 @@ public class Result
         Error = error;
     }
 
-    public bool IsSuccess { get; private set; }
+    public bool IsSuccess { get; protected set; }
     public bool IsFailure => !IsSuccess;
 
     public Error Error { get; private set; }

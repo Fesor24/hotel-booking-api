@@ -5,7 +5,7 @@ using MediatR;
 
 namespace HB.Application.Features.Hotel.Queries.CheckStatus;
 internal sealed class CheckStatusRequestHandler : IRequestHandler<CheckStatusRequest,
-    Result<object, HotelBedErrorResponse>>
+    Result<HotelBedStatusResponse, Error>>
 {
     private readonly IHotelBedService _hotelBedService;
 
@@ -14,9 +14,14 @@ internal sealed class CheckStatusRequestHandler : IRequestHandler<CheckStatusReq
         _hotelBedService = hotelBedService;
     }
 
-    public async Task<Result<object, HotelBedErrorResponse>> Handle(CheckStatusRequest request, 
+    public async Task<Result<HotelBedStatusResponse, Error>> Handle(CheckStatusRequest request, 
         CancellationToken cancellationToken)
     {
-        return await _hotelBedService.CheckStatus();
+        var res =  await _hotelBedService.CheckStatus();
+
+        if (res.IsFailure)
+            return new Error("404", res.ErrorResult.Message, res.ErrorResult.Error);
+
+        return res.Value;
     }
 }

@@ -1,3 +1,6 @@
+using HB.API.Endpoints;
+using HB.API.Extensions;
+using HB.API.Middleware;
 using HB.Application;
 using HB.Application.Features.Hotel.Queries.CheckStatus;
 using HB.Infrastructure;
@@ -12,6 +15,13 @@ Log.Logger = new LoggerConfiguration()
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddEndpointsApiExplorer();
+
+builder.Services.AddSwaggerGen(gen =>
+{
+    gen.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Hotel Booking API", Version = "v1" });
+});
+
 builder.Services.AddSerilog();
 
 builder.Services.AddInfrastructureServices()
@@ -22,14 +32,16 @@ builder.Services.Configure<HotelBedConfiguration>(
 
 var app = builder.Build();
 
-app.MapGet("/", () => "Hello World!");
+app.UseMiddleware<ExceptionMiddleware>();
 
-app.MapGet("api/hotel/status", async (MediatR.ISender sender) =>
+app.UseSwagger();
+
+app.UseSwaggerUI(s =>
 {
-    var res = await sender.Send(new CheckStatusRequest());
-
-    return Results.Ok(res.Value);
+    s.SwaggerEndpoint("/swagger/v1/swagger.json", "Hotel Booking API v.1");
 });
+
+app.RegisterEndpoints();
 
 app.UseSerilogRequestLogging();
 

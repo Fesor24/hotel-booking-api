@@ -1,6 +1,7 @@
 ﻿using HB.Domain.Models.Http;
 using HB.Domain.Services.Http;
 using HB.Domain.Shared;
+using Microsoft.AspNetCore.Http;
 using System.Net.Http.Json;
 using System.Text.Json;
 
@@ -21,11 +22,6 @@ public class HttpClient : IHttpClient
 
         HttpResponseMessage response = new();
 
-        var jsonOptions = new JsonSerializerOptions
-        {
-            DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
-        };
-
         foreach(var header in model.Headers)
         {
             client.DefaultRequestHeaders.Add(header.Key, header.Value);
@@ -45,26 +41,11 @@ public class HttpClient : IHttpClient
             throw;
         }
 
-        if (response.IsSuccessStatusCode)
-        {
-            var res = await response.Content.ReadFromJsonAsync<TResult>(jsonOptions);
-
-            return res;
-        }
-        else
-        {
-            string errorMessage = response.ReasonPhrase;
-
-            var err = await response.Content.ReadFromJsonAsync<TErrorResult>(jsonOptions);
-
-            if(err is not null)
-                err.Message = errorMessage;
-
-            return err;
-        }
+        return await HandleResponse<TResult, TErrorResult>(response);
     }
 
-    public async Task<Result<TResult, TErrorResult>> SendAsync<TResult, TErrorResult>(HttpRequest model) 
+    public async Task<Result<TResult, TErrorResult>> SendAsync<TResult, TErrorResult>
+        (Domain.Models.Http.HttpRequest model) 
         where TErrorResult : BaseError
     {
         using var client = _httpClientFactory.CreateClient();
@@ -94,13 +75,25 @@ public class HttpClient : IHttpClient
             throw;
         }
 
+        return await HandleResponse<TResult, TErrorResult>(response);
+    }
+
+    private async Task<Result<TResult, TErrorResult>> HandleResponse<TResult, TErrorResult>(HttpResponseMessage response)
+        where TErrorResult : BaseError
+    {
+        var jsonOptions = new JsonSerializerOptions
+        {
+            DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
+        };
+
         if (response.IsSuccessStatusCode)
         {
             var res = await response.Content.ReadFromJsonAsync<TResult>(jsonOptions);
 
             return res;
         }
-        else
+        else if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized ||
+           response.StatusCode == System.Net.HttpStatusCode.Forbidden)
         {
             string errorMessage = response.ReasonPhrase;
 
@@ -108,6 +101,18 @@ public class HttpClient : IHttpClient
 
             if (err is not null)
                 err.Message = errorMessage;
+
+            return err;
+        }
+        else
+        {
+            TErrorResult err = (TErrorResult)Activator.CreateInstance(typeof(TErrorResult));
+
+            var error = await response.Content.ReadAsStringAsync();
+
+            err.Message = response.ReasonPhrase;
+
+            err.Details = error;
 
             return err;
         }

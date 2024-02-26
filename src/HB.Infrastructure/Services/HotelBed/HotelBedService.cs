@@ -20,7 +20,7 @@ public class HotelBedService : IHotelBedService
         _hotelBedConfig = hotelBedConfig.Value;
     }
 
-    public async Task<Result<object, HotelBedErrorResponse>> CheckStatus()
+    public async Task<Result<HotelBedStatusResponse, HotelBedErrorResponse>> CheckStatus()
     {
         string url = _hotelBedConfig.Url + "/hotel-api/1.0/status";
 
@@ -32,7 +32,25 @@ public class HotelBedService : IHotelBedService
         req.Uri = url;
         req.Method = HttpMethod.Get;
 
-        var res = await _httpClient.SendAsync<object, HotelBedErrorResponse>(req);
+        var res = await _httpClient.SendAsync<HotelBedStatusResponse, HotelBedErrorResponse>(req);
+
+        return res;
+    }
+
+    public async Task<Result<object, HotelBedErrorResponse>> Search(HotelSearch search)
+    {
+        string url = _hotelBedConfig.Url + "/hotel-api/1.0/hotels";
+
+        var req = new HttpRequest<HotelSearch>();
+
+        req.Headers.Add("Api-key", _hotelBedConfig.ApiKey);
+        req.Headers.Add("X-Signature", GetComputedHashedSignature());
+
+        req.Uri = url;
+        req.Method = HttpMethod.Post;
+        req.Body = search;
+
+        var res = await _httpClient.SendAsync<HotelSearch, object, HotelBedErrorResponse>(req);
 
         return res;
     }

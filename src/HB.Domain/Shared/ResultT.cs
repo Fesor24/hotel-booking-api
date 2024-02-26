@@ -12,7 +12,10 @@ public class Result<TValue, TError>: Result where TError: BaseError
     public Result(TError error)
     {
         _error = error;
+        IsSuccess = false;
     }
+
+    public TError ErrorResult => _error;
 
     public TValue Value => IsSuccess ? _value :
         throw new Exception("Value can not be accessed");

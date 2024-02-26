@@ -4,5 +4,6 @@ using HB.Domain.Shared;
 namespace HB.Domain.Services.HotelBed;
 public interface IHotelBedService
 {
-    Task<Result<object, HotelBedErrorResponse>> CheckStatus();
+    Task<Result<HotelBedStatusResponse, HotelBedErrorResponse>> CheckStatus();
+    Task<Result<object, HotelBedErrorResponse>> Search(HotelSearch search);
 }

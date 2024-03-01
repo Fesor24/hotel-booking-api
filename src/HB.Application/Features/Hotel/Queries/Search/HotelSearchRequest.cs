@@ -1,11 +1,13 @@
-﻿using HB.Domain.Shared;
+﻿using HB.Domain.Models.HotelBed;
+using HB.Domain.Shared;
 using MediatR;
 
 namespace HB.Application.Features.Hotel.Queries.Search;
 public record HotelSearchRequest(
     HotelSearchDuration Duration,
-    HotelSearchOccupants Occupants
-    ) : IRequest<Result<object, Error>>;
+    HotelSearchOccupants Occupants,
+    List<int> HotelCodes
+    ) : IRequest<Result<HotelSearchResponse, Error>>;
 
 public record HotelSearchDuration(
     DateTime CheckIn,

@@ -13,6 +13,6 @@ public class HotelEndpoints : IEndpoint
         const string ENDPOINT = "Hotel";
 
         app.MediatorGet<CheckStatusRequest, HotelBedStatusResponse>(ENDPOINT, "status");
-        app.MediatorPost<HotelSearchRequest, object>(ENDPOINT, "search");
+        app.MediatorPost<HotelSearchRequest, HotelSearchResponse>(ENDPOINT, "search");
     }
 }

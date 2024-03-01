@@ -4,7 +4,8 @@ using HB.Domain.Shared;
 using MediatR;
 
 namespace HB.Application.Features.Hotel.Queries.Search;
-internal sealed class HotelSearchRequestHandler : IRequestHandler<HotelSearchRequest, Result<object, Error>>
+internal sealed class HotelSearchRequestHandler : IRequestHandler<HotelSearchRequest, 
+    Result<HotelSearchResponse, Error>>
 {
     private readonly IHotelBedService _hotelBedService;
 
@@ -13,7 +14,8 @@ internal sealed class HotelSearchRequestHandler : IRequestHandler<HotelSearchReq
         _hotelBedService = hotelBedService;
     }
 
-    public async Task<Result<object, Error>> Handle(HotelSearchRequest request, CancellationToken cancellationToken)
+    public async Task<Result<HotelSearchResponse, Error>> Handle(HotelSearchRequest request, 
+        CancellationToken cancellationToken)
     {
         HotelSearch hotelSearch = new();
 
@@ -33,13 +35,17 @@ internal sealed class HotelSearchRequestHandler : IRequestHandler<HotelSearchReq
             CheckOut = request.Duration.CheckOut.ToString("yyyy-MM-dd")
         };
 
+        hotelSearch.Hotels.Hotel = request.HotelCodes;
+
         var res = await _hotelBedService.Search(hotelSearch);
 
-        string errorDetails = string.IsNullOrWhiteSpace(res.ErrorResult.Error) ? res.ErrorResult.Details :
+        if (res.IsFailure)
+        {
+            string errorDetails = string.IsNullOrWhiteSpace(res.ErrorResult.Error) ? res.ErrorResult.Details :
             res.ErrorResult.Error;
 
-        if (res.IsFailure)
             return new Error("404", res.ErrorResult.Message, errorDetails);
+        }
 
         return res.Value;
     }

@@ -9,6 +9,8 @@ public class HotelSearch
     public List<Occupancy> Occupancies { get; } = new();
     [JsonPropertyName("dailyRate")]
     public bool DailyRate => true;
+    [JsonPropertyName("hotels")]
+    public HotelFilter Hotels { get; set; } = new();
 
     public class HotelStay
     {
@@ -26,5 +28,10 @@ public class HotelSearch
         public int Adults { get; set; } = 1;
         [JsonPropertyName("children")]
         public int Children { get; set; } = 0;
+    }
+
+    public class HotelFilter
+    {
+        public List<int> Hotel { get; set; } = new();
     }
 }

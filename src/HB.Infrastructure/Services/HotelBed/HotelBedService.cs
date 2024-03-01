@@ -37,7 +37,7 @@ public class HotelBedService : IHotelBedService
         return res;
     }
 
-    public async Task<Result<object, HotelBedErrorResponse>> Search(HotelSearch search)
+    public async Task<Result<HotelSearchResponse, HotelBedErrorResponse>> Search(HotelSearch search)
     {
         string url = _hotelBedConfig.Url + "/hotel-api/1.0/hotels";
 
@@ -50,7 +50,7 @@ public class HotelBedService : IHotelBedService
         req.Method = HttpMethod.Post;
         req.Body = search;
 
-        var res = await _httpClient.SendAsync<HotelSearch, object, HotelBedErrorResponse>(req);
+        var res = await _httpClient.SendAsync<HotelSearch, HotelSearchResponse, HotelBedErrorResponse>(req);
 
         return res;
     }

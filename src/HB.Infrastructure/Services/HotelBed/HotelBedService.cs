@@ -26,8 +26,7 @@ public class HotelBedService : IHotelBedService
 
         var req = new HttpRequest();
 
-        req.Headers.Add("Api-key", _hotelBedConfig.ApiKey);
-        req.Headers.Add("X-Signature", GetComputedHashedSignature());
+        req = IncludeAuthHeaders(req);
 
         req.Uri = url;
         req.Method = HttpMethod.Get;
@@ -43,8 +42,7 @@ public class HotelBedService : IHotelBedService
 
         var req = new HttpRequest<HotelSearch>();
 
-        req.Headers.Add("Api-key", _hotelBedConfig.ApiKey);
-        req.Headers.Add("X-Signature", GetComputedHashedSignature());
+        req = IncludeAuthHeaders(req);
 
         req.Uri = url;
         req.Method = HttpMethod.Post;
@@ -57,17 +55,34 @@ public class HotelBedService : IHotelBedService
 
     public async Task<Result<object, HotelBedErrorResponse>> GetHotels()
     {
-        string url = _hotelBedConfig.Url + "/hotel-content-api/1.0/hotels?fields=all&language=ENG&from=1&to=1000";
+        string url = _hotelBedConfig.Url + 
+            "/hotel-content-api/1.0/hotels?fields=all&language=ENG&from=1&to=1000";
 
         var req = new HttpRequest();
 
-        req.Headers.Add("Api-key", _hotelBedConfig.ApiKey);
-        req.Headers.Add("X-Signature", GetComputedHashedSignature());
+        req = IncludeAuthHeaders(req);
 
         req.Uri = url;
         req.Method = HttpMethod.Get;
 
         var res = await _httpClient.SendAsync<object, HotelBedErrorResponse>(req);
+
+        return res;
+    }
+
+    public async Task<Result<HotelLocationResponse, HotelBedErrorResponse>> GetLocations()
+    {
+        string url = _hotelBedConfig.Url + 
+            "/hotel-content-api/1.0/locations/countries?fields=all&language=ENG&from=1&to=100";
+
+        var req = new HttpRequest();
+
+        req = IncludeAuthHeaders(req);
+
+        req.Uri = url;
+        req.Method = HttpMethod.Get;
+
+        var res = await _httpClient.SendAsync<HotelLocationResponse, HotelBedErrorResponse>(req);
 
         return res;
     }
@@ -87,5 +102,21 @@ public class HotelBedService : IHotelBedService
         }
 
         return sb.ToString();
+    }
+
+    private HttpRequest IncludeAuthHeaders(HttpRequest req)
+    {
+        req.Headers.Add("Api-key", _hotelBedConfig.ApiKey);
+        req.Headers.Add("X-Signature", GetComputedHashedSignature());
+
+        return req;
+    }
+
+    private HttpRequest<TBody> IncludeAuthHeaders<TBody>(HttpRequest<TBody> req)
+    {
+        req.Headers.Add("Api-key", _hotelBedConfig.ApiKey);
+        req.Headers.Add("X-Signature", GetComputedHashedSignature());
+
+        return req;
     }
 }

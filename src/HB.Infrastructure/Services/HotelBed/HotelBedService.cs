@@ -55,6 +55,23 @@ public class HotelBedService : IHotelBedService
         return res;
     }
 
+    public async Task<Result<object, HotelBedErrorResponse>> GetHotels()
+    {
+        string url = _hotelBedConfig.Url + "/hotel-content-api/1.0/hotels?fields=all&language=ENG&from=1&to=1000";
+
+        var req = new HttpRequest();
+
+        req.Headers.Add("Api-key", _hotelBedConfig.ApiKey);
+        req.Headers.Add("X-Signature", GetComputedHashedSignature());
+
+        req.Uri = url;
+        req.Method = HttpMethod.Get;
+
+        var res = await _httpClient.SendAsync<object, HotelBedErrorResponse>(req);
+
+        return res;
+    }
+
     private string GetComputedHashedSignature()
     {
         string valueToBeHashed = _hotelBedConfig.ApiKey + _hotelBedConfig.Secret +

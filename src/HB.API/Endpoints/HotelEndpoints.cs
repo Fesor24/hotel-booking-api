@@ -1,6 +1,7 @@
 ﻿using HB.API.Extensions;
 using HB.API.Shared;
 using HB.Application.Features.Hotel.Queries.CheckStatus;
+using HB.Application.Features.Hotel.Queries.GetHotels;
 using HB.Application.Features.Hotel.Queries.Search;
 using HB.Domain.Models.HotelBed;
 
@@ -14,5 +15,6 @@ public class HotelEndpoints : IEndpoint
 
         app.MediatorGet<CheckStatusRequest, HotelBedStatusResponse>(ENDPOINT, "status");
         app.MediatorPost<HotelSearchRequest, HotelSearchResponse>(ENDPOINT, "search");
+        app.MediatorGet<GetHotelsRequest, object>(ENDPOINT, "");
     }
 }

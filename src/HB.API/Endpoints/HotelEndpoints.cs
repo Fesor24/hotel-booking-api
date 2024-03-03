@@ -17,6 +17,6 @@ public class HotelEndpoints : IEndpoint
         app.MediatorGet<CheckStatusRequest, HotelBedStatusResponse>(ENDPOINT, "status");
         app.MediatorPost<HotelSearchRequest, HotelSearchResponse>(ENDPOINT, "search");
         app.MediatorGet<GetHotelsRequest, object>(ENDPOINT, "");
-        app.MediatorGet<GetLocationsRequest, object>(ENDPOINT, "locations");
+        app.MediatorGet<GetLocationsRequest, HotelLocationResponse>(ENDPOINT, "locations");
     }
 }

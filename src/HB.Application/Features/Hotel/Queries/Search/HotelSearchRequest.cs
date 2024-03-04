@@ -7,7 +7,7 @@ public record HotelSearchRequest(
     HotelSearchDuration Duration,
     HotelSearchOccupants Occupants,
     List<int> HotelCodes
-    ) : IRequest<Result<HotelSearchResponse, Error>>;
+    ) : IRequest<Result<HotelSearchResponse.HotelData, Error>>;
 
 public record HotelSearchDuration(
     DateTime CheckIn,

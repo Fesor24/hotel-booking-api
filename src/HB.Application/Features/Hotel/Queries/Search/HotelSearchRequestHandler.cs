@@ -5,7 +5,7 @@ using MediatR;
 
 namespace HB.Application.Features.Hotel.Queries.Search;
 internal sealed class HotelSearchRequestHandler : IRequestHandler<HotelSearchRequest, 
-    Result<HotelSearchResponse, Error>>
+    Result<HotelSearchResponse.HotelData, Error>>
 {
     private readonly IHotelBedService _hotelBedService;
 
@@ -14,7 +14,7 @@ internal sealed class HotelSearchRequestHandler : IRequestHandler<HotelSearchReq
         _hotelBedService = hotelBedService;
     }
 
-    public async Task<Result<HotelSearchResponse, Error>> Handle(HotelSearchRequest request, 
+    public async Task<Result<HotelSearchResponse.HotelData, Error>> Handle(HotelSearchRequest request, 
         CancellationToken cancellationToken)
     {
         HotelSearch hotelSearch = new();
@@ -47,6 +47,6 @@ internal sealed class HotelSearchRequestHandler : IRequestHandler<HotelSearchReq
             return new Error("404", res.ErrorResult.Message, errorDetails);
         }
 
-        return res.Value;
+        return res.Value.Hotels;
     }
 }

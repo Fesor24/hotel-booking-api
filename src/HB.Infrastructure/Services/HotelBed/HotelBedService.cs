@@ -53,6 +53,23 @@ public class HotelBedService : IHotelBedService
         return res;
     }
 
+    public async Task<Result<HotelRateResponse, HotelBedErrorResponse>> CheckRates(HotelRate rate)
+    {
+        string url = _hotelBedConfig.Url + "/hotel-api/1.0/checkrates";
+
+        var req = new HttpRequest<HotelRate>();
+
+        req = IncludeAuthHeaders(req);
+
+        req.Uri = url;
+        req.Method = HttpMethod.Post;
+        req.Body = rate;
+
+        var res = await _httpClient.SendAsync<HotelRate, HotelRateResponse, HotelBedErrorResponse>(req);
+
+        return res;
+    }
+
     public async Task<Result<object, HotelBedErrorResponse>> GetHotels()
     {
         string url = _hotelBedConfig.Url + 
@@ -83,6 +100,25 @@ public class HotelBedService : IHotelBedService
         req.Method = HttpMethod.Get;
 
         var res = await _httpClient.SendAsync<HotelLocationResponse, HotelBedErrorResponse>(req);
+
+        return res;
+    }
+
+    public async Task<Result<HotelBookingConfirmationResponse, HotelBedErrorResponse>> 
+        ConfirmBooking(HotelBookingConfirmation confirmation)
+    {
+        string url = _hotelBedConfig.Url + "/hotel-api/1.0/bookings";
+
+        var req = new HttpRequest<HotelBookingConfirmation>();
+
+        req = IncludeAuthHeaders(req);
+
+        req.Uri = url;
+        req.Method = HttpMethod.Post;
+        req.Body = confirmation;
+
+        var res = await _httpClient.SendAsync<HotelBookingConfirmation, HotelBookingConfirmationResponse, 
+            HotelBedErrorResponse>(req);
 
         return res;
     }

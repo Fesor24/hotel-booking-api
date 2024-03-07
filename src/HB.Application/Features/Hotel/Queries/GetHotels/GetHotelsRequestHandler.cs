@@ -14,7 +14,7 @@ internal sealed class GetHotelsRequestHandler : IRequestHandler<GetHotelsRequest
 
     public async Task<Result<object, Error>> Handle(GetHotelsRequest request, CancellationToken cancellationToken)
     {
-        var res = await _hotelBedService.GetHotels();
+        var res = await _hotelBedService.GetHotels(request.From, request.To);
 
         if (res.IsFailure)
         {

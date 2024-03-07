@@ -70,10 +70,10 @@ public class HotelBedService : IHotelBedService
         return res;
     }
 
-    public async Task<Result<object, HotelBedErrorResponse>> GetHotels()
+    public async Task<Result<object, HotelBedErrorResponse>> GetHotels(int from, int to)
     {
         string url = _hotelBedConfig.Url + 
-            "/hotel-content-api/1.0/hotels?fields=all&language=ENG&from=1&to=1000";
+            $"/hotel-content-api/1.0/hotels?fields=all&language=ENG&from={from}&to={to}";
 
         var req = new HttpRequest();
 
@@ -87,10 +87,10 @@ public class HotelBedService : IHotelBedService
         return res;
     }
 
-    public async Task<Result<HotelLocationResponse, HotelBedErrorResponse>> GetLocations()
+    public async Task<Result<HotelLocationResponse, HotelBedErrorResponse>> GetLocations(int from, int to)
     {
         string url = _hotelBedConfig.Url + 
-            "/hotel-content-api/1.0/locations/countries?fields=all&language=ENG&from=1&to=100";
+            $"/hotel-content-api/1.0/locations/countries?fields=all&language=ENG&from={from}&to={to}";
 
         var req = new HttpRequest();
 

@@ -5,7 +5,7 @@ using MediatR;
 
 namespace HB.Application.Features.Hotel.Queries.GetLocations;
 internal sealed class GetLocationsRequestHandler : IRequestHandler<GetLocationsRequest, 
-    Result<HotelLocationResponse, Error>>
+    Result<List<HotelLocationResponse.Country>, Error>>
 {
     private readonly IHotelBedService _hotelBedService;
 
@@ -14,10 +14,10 @@ internal sealed class GetLocationsRequestHandler : IRequestHandler<GetLocationsR
         _hotelBedService = hotelBedService;
     }
 
-    public async Task<Result<HotelLocationResponse, Error>> Handle(GetLocationsRequest request, 
+    public async Task<Result<List<HotelLocationResponse.Country>, Error>> Handle(GetLocationsRequest request, 
         CancellationToken cancellationToken)
     {
-        var res = await _hotelBedService.GetLocations();
+        var res = await _hotelBedService.GetLocations(request.From, request.To);
 
         if (res.IsFailure)
         {
@@ -27,6 +27,6 @@ internal sealed class GetLocationsRequestHandler : IRequestHandler<GetLocationsR
             return new Error("404", res.ErrorResult.Message, errorDetails);
         }
 
-        return res.Value;
+        return res.Value.Countries;
     }
 }

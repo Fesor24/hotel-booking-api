@@ -70,7 +70,7 @@ public class HotelBedService : IHotelBedService
         return res;
     }
 
-    public async Task<Result<object, HotelBedErrorResponse>> GetHotels(int from, int to)
+    public async Task<Result<HotelsResponse, HotelBedErrorResponse>> GetHotels(int from, int to)
     {
         string url = _hotelBedConfig.Url + 
             $"/hotel-content-api/1.0/hotels?fields=all&language=ENG&from={from}&to={to}";
@@ -82,7 +82,7 @@ public class HotelBedService : IHotelBedService
         req.Uri = url;
         req.Method = HttpMethod.Get;
 
-        var res = await _httpClient.SendAsync<object, HotelBedErrorResponse>(req);
+        var res = await _httpClient.SendAsync<HotelsResponse, HotelBedErrorResponse>(req);
 
         return res;
     }
@@ -119,6 +119,22 @@ public class HotelBedService : IHotelBedService
 
         var res = await _httpClient.SendAsync<HotelBookingConfirmation, HotelBookingConfirmationResponse, 
             HotelBedErrorResponse>(req);
+
+        return res;
+    }
+
+    public async Task<Result<object, HotelBedErrorResponse>> GetFacilities(int from, int to)
+    {
+        string url = _hotelBedConfig.Url + $"/hotel-content-api/1.0/types/facilities?fields=all&from={from}&to{to}";
+
+        var req = new HttpRequest();
+
+        req = IncludeAuthHeaders(req);
+
+        req.Uri = url;
+        req.Method = HttpMethod.Get;
+
+        var res = await _httpClient.SendAsync<object, HotelBedErrorResponse>(req);
 
         return res;
     }

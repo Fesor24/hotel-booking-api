@@ -1,9 +1,10 @@
-﻿using HB.Domain.Services.HotelBed;
+﻿using HB.Domain.Models.HotelBed;
+using HB.Domain.Services.HotelBed;
 using HB.Domain.Shared;
 using MediatR;
 
 namespace HB.Application.Features.Hotel.Queries.GetHotels;
-internal sealed class GetHotelsRequestHandler : IRequestHandler<GetHotelsRequest, Result<object, Error>>
+internal sealed class GetHotelsRequestHandler : IRequestHandler<GetHotelsRequest, Result<List<HotelsResponse.Hotel>, Error>>
 {
     private readonly IHotelBedService _hotelBedService;
 
@@ -12,7 +13,8 @@ internal sealed class GetHotelsRequestHandler : IRequestHandler<GetHotelsRequest
         _hotelBedService = hotelBedService;
     }
 
-    public async Task<Result<object, Error>> Handle(GetHotelsRequest request, CancellationToken cancellationToken)
+    public async Task<Result<List<HotelsResponse.Hotel>, Error>> Handle(GetHotelsRequest request, 
+        CancellationToken cancellationToken)
     {
         var res = await _hotelBedService.GetHotels(request.From, request.To);
 
@@ -24,6 +26,6 @@ internal sealed class GetHotelsRequestHandler : IRequestHandler<GetHotelsRequest
             return new Error("400", res.ErrorResult.Message, errorDetails);
         }
 
-        return res.Value;
+        return res.Value.Hotels;
     }
 }

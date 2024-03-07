@@ -1,11 +1,8 @@
-using HB.API.Endpoints;
 using HB.API.Extensions;
 using HB.API.Middleware;
 using HB.Application;
-using HB.Application.Features.Hotel.Queries.CheckStatus;
 using HB.Infrastructure;
 using HB.Infrastructure.Configurations;
-using MediatR;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()
@@ -24,7 +21,7 @@ builder.Services.AddSwaggerGen(gen =>
 
 builder.Services.AddSerilog();
 
-builder.Services.AddInfrastructureServices()
+builder.Services.AddInfrastructureServices(builder.Configuration)
     .AddApplicationServices();
 
 builder.Services.Configure<HotelBedConfiguration>(

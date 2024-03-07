@@ -11,6 +11,8 @@ public static class DependencyInjection
             opt.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
         });
 
+        services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
         return services;
     }
 }

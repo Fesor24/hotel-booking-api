@@ -4,6 +4,7 @@ using HB.Application;
 using HB.Infrastructure;
 using HB.Infrastructure.Configurations;
 using Serilog;
+using System.Reflection;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -21,7 +22,8 @@ builder.Services.AddSwaggerGen(gen =>
 
 builder.Services.AddSerilog();
 
-builder.Services.AddInfrastructureServices(builder.Configuration)
+builder.Services
+    .AddInfrastructureServices(builder.Configuration)
     .AddApplicationServices();
 
 builder.Services.Configure<HotelBedConfiguration>(

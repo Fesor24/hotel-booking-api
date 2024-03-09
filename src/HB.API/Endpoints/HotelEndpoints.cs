@@ -13,7 +13,7 @@ namespace HB.API.Endpoints;
 
 public class HotelEndpoints : IEndpoint
 {
-    public void Register(WebApplication app)
+    public void MapEndpoint(IEndpointRouteBuilder app)
     {
         const string ENDPOINT = "Hotel";
 

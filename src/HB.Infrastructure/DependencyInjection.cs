@@ -1,14 +1,13 @@
-﻿using HB.Domain.Primitives;
+﻿using HB.Domain.Entity.CountryAggregate;
+using HB.Domain.Primitives;
 using HB.Domain.Services.HotelBed;
 using HB.Domain.Services.Http;
 using HB.Infrastructure.Data;
 using HB.Infrastructure.Repository;
 using HB.Infrastructure.Services.HotelBed;
-using HB.Shared.ServiceExtensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
-using System.Reflection;
 
 namespace HB.Infrastructure;
 public static class DependencyInjection
@@ -34,7 +33,7 @@ public static class DependencyInjection
 
         services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
-        services.RegisterServiceWthMarkerInterface(Assembly.GetExecutingAssembly());
+        services.AddScoped<ICountryRepository, CountryRepository>();
 
         return services;
     }

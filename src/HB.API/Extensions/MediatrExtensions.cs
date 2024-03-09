@@ -6,7 +6,8 @@ namespace HB.API.Extensions;
 
 internal static class MediatrExtensions
 {
-    internal static void MediatorGet<TRequest, TResponse>(this WebApplication app, string endpointGroup, string route)
+    internal static void MediatorGet<TRequest, TResponse>(this IEndpointRouteBuilder app, 
+        string endpointGroup, string route)
         where TRequest : IRequest<Result<TResponse, Error>>
     {
         route = $"/api/{endpointGroup}/{route}";
@@ -16,7 +17,8 @@ internal static class MediatrExtensions
             .Produces<TResponse>();
     }
 
-    internal static void MediatorPost<TRequest, TResponse>(this WebApplication app, string endpointGroup, string route)
+    internal static void MediatorPost<TRequest, TResponse>(this IEndpointRouteBuilder app, 
+        string endpointGroup, string route)
         where TRequest : IRequest<Result<TResponse, Error>>
     {
         route = $"/api/{endpointGroup}/{route}";

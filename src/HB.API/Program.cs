@@ -15,6 +15,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
 
+builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
+
 builder.Services.AddSwaggerGen(gen =>
 {
     gen.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Hotel Booking API", Version = "v1" });
@@ -40,7 +42,9 @@ app.UseSwaggerUI(s =>
     s.SwaggerEndpoint("/swagger/v1/swagger.json", "Hotel Booking API v.1");
 });
 
-app.RegisterEndpoints();
+//app.RegisterEndpoints();
+
+app.MapEndpoints();
 
 app.UseSerilogRequestLogging();
 

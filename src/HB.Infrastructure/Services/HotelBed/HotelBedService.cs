@@ -7,6 +7,7 @@ using HB.Infrastructure.Configurations;
 using Microsoft.Extensions.Options;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.Json;
 
 namespace HB.Infrastructure.Services.HotelBed;
 public class HotelBedService : IHotelBedService

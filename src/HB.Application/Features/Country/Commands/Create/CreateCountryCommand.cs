@@ -2,4 +2,5 @@
 using MediatR;
 
 namespace HB.Application.Features.Country.Commands.Create;
-public record CreateCountryCommand() : IRequest<Result<string, Error>>;
+public record CreateCountryCommand(int From, int To) : 
+    IRequest<Result<bool, Error>>;

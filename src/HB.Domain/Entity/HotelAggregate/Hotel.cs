@@ -14,7 +14,7 @@ public class Hotel : BaseEntity
     public string License { get; set; }
     public List<PhoneContact> Contact { get; set; }
     public List<string> Images { get; set; }
-    public int Ranjing { get; set; }
+    public int Ranking { get; set; }
 
     public class PhoneContact
     {

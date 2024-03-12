@@ -1,4 +1,5 @@
 ﻿using HB.Domain.Entity.CountryAggregate;
+using HB.Domain.Entity.HotelAggregate;
 using HB.Domain.Primitives;
 using HB.Domain.Services.HotelBed;
 using HB.Domain.Services.Http;
@@ -34,6 +35,8 @@ public static class DependencyInjection
         services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
         services.AddScoped<ICountryRepository, CountryRepository>();
+
+        services.AddScoped<IHotelRepository, HotelRepository>();
 
         return services;
     }

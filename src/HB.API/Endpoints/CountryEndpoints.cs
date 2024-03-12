@@ -12,6 +12,6 @@ public class CountryEndpoints : IEndpoint
         const string ENDPOINT = "Country";
 
         app.MediatorGet<GetCountriesRequest, List<GetCountryResponse>>(ENDPOINT, "list");
-        app.MediatorGet<CreateCountryCommand, string>(ENDPOINT, "");
+        app.MediatorGet<CreateCountryCommand, bool>(ENDPOINT, "");
     }
 }

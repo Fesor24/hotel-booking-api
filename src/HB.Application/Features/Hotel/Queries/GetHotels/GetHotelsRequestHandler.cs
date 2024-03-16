@@ -1,31 +1,23 @@
-﻿using HB.Domain.Models.HotelBed;
-using HB.Domain.Services.HotelBed;
+﻿using HB.Domain.Entity.HotelAggregate;
 using HB.Domain.Shared;
 using MediatR;
 
 namespace HB.Application.Features.Hotel.Queries.GetHotels;
-internal sealed class GetHotelsRequestHandler : IRequestHandler<GetHotelsRequest, Result<List<HotelsResponse.Hotel>, Error>>
+internal sealed class GetHotelsRequestHandler : IRequestHandler<GetHotelsRequest, 
+    Result<List<HotelEntity>, Error>>
 {
-    private readonly IHotelBedService _hotelBedService;
+    private readonly IHotelRepository _hotelRepository;
 
-    public GetHotelsRequestHandler(IHotelBedService hotelBedService)
+    public GetHotelsRequestHandler(IHotelRepository hotelRepository)
     {
-        _hotelBedService = hotelBedService;
+        _hotelRepository = hotelRepository;
     }
 
-    public async Task<Result<List<HotelsResponse.Hotel>, Error>> Handle(GetHotelsRequest request, 
+    public async Task<Result<List<HotelEntity>, Error>> Handle(GetHotelsRequest request, 
         CancellationToken cancellationToken)
     {
-        var res = await _hotelBedService.GetHotels(request.From, request.To);
+        var hotels = await _hotelRepository.GetAllAsync();
 
-        if (res.IsFailure)
-        {
-            string errorDetails = string.IsNullOrWhiteSpace(res.ErrorResult.Error) ? res.ErrorResult.Details :
-                res.ErrorResult.Error;
-
-            return new Error("400", res.ErrorResult.Message, errorDetails);
-        }
-
-        return res.Value.Hotels;
+        return hotels;
     }
 }

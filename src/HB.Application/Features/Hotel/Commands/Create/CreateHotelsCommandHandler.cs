@@ -2,6 +2,7 @@
 using HB.Domain.Services.HotelBed;
 using HB.Domain.Shared;
 using MediatR;
+using MongoDB.Driver.Core.WireProtocol.Messages.Encoders;
 
 namespace HB.Application.Features.Hotel.Commands.Create;
 internal sealed class CreateHotelsCommandHandler : IRequestHandler<CreateHotelsCommand, Result<bool, Error>>
@@ -31,6 +32,9 @@ internal sealed class CreateHotelsCommandHandler : IRequestHandler<CreateHotelsC
 
         foreach(var item in res.Value.Hotels)
         {
+            if (item is null)
+                continue;
+
             List<HotelEntity.PhoneContact> contacts = new();
 
             foreach(var contact in item.Phones)
@@ -40,6 +44,8 @@ internal sealed class CreateHotelsCommandHandler : IRequestHandler<CreateHotelsC
                     PhoneNumber = contact.PhoneNumber,
                     PhoneType = contact.PhoneType
                 };
+
+                contacts.Add(cont);
             }
 
             HotelEntity hotel = new()

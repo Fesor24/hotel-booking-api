@@ -8,6 +8,11 @@ public class Error : BaseError
         
     }
 
+    public Error(string code, string message) : base(code, message, message)
+    {
+        
+    }
+
     public Error(string code, string message, string details) : base(code, message, details)
     {
         

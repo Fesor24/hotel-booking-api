@@ -1,10 +1,11 @@
 ﻿using HB.Domain.Entity.HotelAggregate;
+using HB.Infrastructure.Data;
 using MongoDB.Driver;
 
 namespace HB.Infrastructure.Repository;
-internal class HotelRepository : GenericRepository<Hotel>, IHotelRepository
+public class HotelRepository : GenericRepository<Hotel>, IHotelRepository
 {
-    public HotelRepository(IMongoCollection<Hotel> collection) : base(collection)
+    public HotelRepository(HotelDbContext context) : base(context.Hotel)
     {
         
     }

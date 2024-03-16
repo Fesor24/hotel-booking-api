@@ -1,7 +1,6 @@
-﻿using HB.Domain.Models.HotelBed;
-using HB.Domain.Shared;
+﻿using HB.Domain.Shared;
 using MediatR;
 
 namespace HB.Application.Features.Hotel.Queries.GetHotels;
-public record GetHotelsRequest(int From, int To) : 
-    IRequest<Result<List<HotelsResponse.Hotel>, Error>>;
+public record GetHotelsRequest() : 
+    IRequest<Result<List<HotelEntity>, Error>>;

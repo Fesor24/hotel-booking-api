@@ -3,6 +3,7 @@ using HB.API.Middleware;
 using HB.Application;
 using HB.Infrastructure;
 using HB.Infrastructure.Configurations;
+using Microsoft.OpenApi.Models;
 using Serilog;
 using System.Reflection;
 
@@ -19,7 +20,13 @@ builder.Services.AddEndpoints(Assembly.GetExecutingAssembly());
 
 builder.Services.AddSwaggerGen(gen =>
 {
-    gen.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Hotel Booking API", Version = "v1" });
+    gen.CustomSchemaIds(c => c.ToString());
+    gen.SwaggerDoc("Main", new OpenApiInfo
+    {
+        Title = "Main endpoints",
+        Description = "Endpoints collection under Main",
+        Version = "v1"
+    });
 });
 
 builder.Services.AddSerilog();
@@ -39,10 +46,9 @@ app.UseSwagger();
 
 app.UseSwaggerUI(s =>
 {
-    s.SwaggerEndpoint("/swagger/v1/swagger.json", "Hotel Booking API v.1");
+    s.RoutePrefix = "swagger";
+    s.SwaggerEndpoint("/swagger/Main/swagger.json", "Hotel Booking API v.1");
 });
-
-//app.RegisterEndpoints();
 
 app.MapEndpoints();
 

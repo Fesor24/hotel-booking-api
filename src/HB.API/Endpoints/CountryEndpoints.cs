@@ -9,9 +9,9 @@ public class CountryEndpoints : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        const string ENDPOINT = "Country";
+        const string TAG = "Country";
 
-        app.MediatorGet<GetCountriesRequest, List<GetCountryResponse>>(ENDPOINT, "list");
-        app.MediatorGet<CreateCountryCommand, bool>(ENDPOINT, "");
+        app.MediatorGet<GetCountriesRequest, List<GetCountryResponse>>("country/list", TAG);
+        app.MediatorGet<CreateCountryCommand, bool>("country", TAG);
     }
 }

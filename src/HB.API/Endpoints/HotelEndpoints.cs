@@ -17,15 +17,15 @@ public class HotelEndpoints : IEndpoint
 {
     public void MapEndpoint(IEndpointRouteBuilder app)
     {
-        const string ENDPOINT = "Hotel";
+        const string TAG = "Hotel";
 
-        app.MediatorGet<CheckStatusRequest, HotelBedStatusResponse>(ENDPOINT, "status");
-        app.MediatorPost<HotelSearchRequest, SearchHotelResponse>(ENDPOINT, "search");
-        app.MediatorGet<GetHotelsRequest, List<Hotel>>(ENDPOINT, "list");
-        app.MediatorGet<GetLocationsRequest, List<HotelLocationResponse.Country>>(ENDPOINT, "locations");
-        app.MediatorPost<CheckRateRequest, HotelRateResponse.HotelRate>(ENDPOINT, "rates");
-        app.MediatorPost<HotelBookingConfirmationRequest, HotelBookingConfirmationResponse.HotelBooking>(ENDPOINT, "booking");
-        app.MediatorGet<GetFacilitiesRequest, object>(ENDPOINT, "facilities");
-        app.MediatorGet<CreateHotelsCommand, bool>(ENDPOINT, "load");
+        app.MediatorGet<CheckStatusRequest, HotelBedStatusResponse>("hotel/status", TAG);
+        app.MediatorPost<HotelSearchRequest, SearchHotelResponse>("hotel/search", TAG);
+        app.MediatorGet<GetHotelsRequest, List<Hotel>>("hotel/list", TAG);
+        app.MediatorGet<GetLocationsRequest, List<HotelLocationResponse.Country>>("hotel/locations", TAG);
+        app.MediatorPost<CheckRateRequest, HotelRateResponse.HotelRate>("hotel/rates", TAG);
+        app.MediatorPost<HotelBookingConfirmationRequest, HotelBookingConfirmationResponse.HotelBooking>("hotel/booking", TAG);
+        app.MediatorGet<GetFacilitiesRequest, object>("hotel/facilities", TAG);
+        app.MediatorGet<CreateHotelsCommand, bool>("hotel/load", TAG);
     }
 }
